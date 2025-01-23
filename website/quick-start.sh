@@ -110,9 +110,9 @@ get_trial_license() {
 
 
     log "Please enter your email address for trial license:"
-    read email
+    read -r email < /dev/tty
     log "Please enter your name for your dev license:"
-    read licensee
+    read -r licensee < /dev/tty
     
     log "Requesting trial license for $email..."
     license_response=$(curl -sSL -X POST \
