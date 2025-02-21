@@ -188,7 +188,7 @@ check_lucenia_health() {
     log "Checking Lucenia health..."
     # Wait for Lucenia to start catch if it fails
     sleep 5
-    while ! curl -sSL -k -u admin:$LUCENIA_INITIAL_ADMIN_PASSWORD https://localhost:9200/_cluster/health | grep -q '"status"'; do
+    while ! curl -k -u admin:$LUCENIA_INITIAL_ADMIN_PASSWORD https://localhost:9200/_cluster/health | grep -q '"status"'; do
         log "Waiting for Lucenia to start..."
         sleep 5
     done
@@ -241,8 +241,8 @@ main() {
     setup_demo_config
     check_port_9200_is_used
     start_lucenia
-    check_lucenia_health
     run_security_admin
+    check_lucenia_health
     log "Installation complete! Lucenia is now running."
     log 'To stop  you can issue the command `kill -9 $(cat '$LUCENIA_HOME'/lucenia-'$LUCENIA_VERSION'/lucenia.pid)`'
     log 'Username: admin Password: '$LUCENIA_INITIAL_ADMIN_PASSWORD
