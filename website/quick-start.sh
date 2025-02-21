@@ -91,7 +91,7 @@ download_and_verify() {
       log "into $TEMP_DIR"
       curl -sSL "$DOWNLOAD_URL" --output "$TEMP_DIR/$FILENAME"
       ls "$TEMP_DIR"
-      curl -sSL "$CHECKSUM_URL" --output "$TEMP_DIR/$FILENAME.sha256"
+      curl -sSL "$CHECKSUM_URL" --output "$TEMP_DIR/$FILENAME.sig"
       
       log "Verifying checksum..."
       cd "$TEMP_DIR"
