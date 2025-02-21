@@ -150,7 +150,7 @@ get_trial_license() {
     # Check if license response contains "License already exists"
     if [[ "$license_response" == *"License already exists"* ]]; then
         log "License already exists for $email. Skipping license request."
-        log "Please check your email for the license and put it in $LUCENIA_HOME/lucenia-$LUCENIA_VERSION/config/trial.crt and then run again."
+        log "Please check your email for the license and put it in $LUCENIA_HOME/trial.crt and then run again."
         # Exit script
         exit 1
     fi
