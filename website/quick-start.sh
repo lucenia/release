@@ -150,8 +150,9 @@ get_trial_license() {
     # Check if license response contains "License already exists"
     if [[ "$license_response" == *"License already exists"* ]]; then
         log "License already exists for $email. Skipping license request."
-        log "Please check your email for the license and put it in $LUCENIA_HOME/lucenia-$LUCENIA_VERSION/config/trial.crt"
-        return
+        log "Please check your email for the license and put it in $LUCENIA_HOME/lucenia-$LUCENIA_VERSION/config/trial.crt and then run again."
+        # Exit script
+        exit 0
     fi
     
     echo "$license_response" > "$LUCENIA_HOME/trial.crt"
@@ -208,7 +209,10 @@ EOF
 
 copy_cert_to_config() {
     log "Copying trial license to config..."
-    cp "$LUCENIA_HOME/trial.crt" "$LUCENIA_CONF/trial.crt"
+    # Copy config if exists to config directory
+    if [ -f "$LUCENIA_HOME/trial.crt" ]; then
+        cp "$LUCENIA_HOME/trial.crt" "$LUCENIA_CONF/trial.crt"
+    fi
 }
 
 # Main installation flow
