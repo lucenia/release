@@ -125,11 +125,21 @@ get_trial_license() {
         return
     fi
 
-    log "Please enter your email address for trial license:"
-    read email
+    if [ -z "$INPUT_EMAIL" ]; then
+        log "Please enter your email address for trial license:"
+        read -r email < /dev/tty
+    else
+        log "Email: $INPUT_EMAIL"
+        email=$INPUT_EMAIL
+    fi
 
-    log "Please enter your name for your dev license:"
-    read licensee
+    if [ -z "$INPUT_FULLNAME" ]; then
+        log "Please enter your name for your dev license:"
+        read -r licensee < /dev/tty
+    else
+        log "Licensee name: $INPUT_FULLNAME"
+        licensee=$INPUT_FULLNAME
+    fi    
     
     log "Requesting trial license for $email..."
     license_response=$(curl -sSL -X POST \
