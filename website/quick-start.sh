@@ -40,6 +40,14 @@ setup_directories() {
     mkdir -p "$LUCENIA_HOME"
 }
 
+check_port_9200_is_used() {
+    log "Checking if port 9200 is used..."
+    if nc -z localhost 9200; then
+        log "Port 9200 is used. Please stop the service using port 9200 and try again."
+        exit 1
+    fi
+}
+
 # Download and verify
 download_and_verify() {
     uname=$(uname)
@@ -226,6 +234,7 @@ main() {
     write_lucenia_config
     copy_cert_to_config
     setup_demo_config
+    check_port_9200_is_used
     start_lucenia
     check_lucenia_health
     run_security_admin
