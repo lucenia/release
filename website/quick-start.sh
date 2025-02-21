@@ -2,7 +2,8 @@
 set -e
 
 # Variables
-LUCENIA_VERSION="0.3.0"
+# Lucenia version defaults to 0.3.1 unless specified by environment variable
+LUCENIA_VERSION="${LUCENIA_VERSION:-0.3.1}"
 LUCENIA_HOME="$HOME/.lucenia"
 LUCENIA_INITIAL_ADMIN_PASSWORD="myStrongPassword@123"
 LUCENIA_SEC_TOOLS="$LUCENIA_HOME/lucenia-$LUCENIA_VERSION/plugins/lucenia-security/tools"
@@ -11,9 +12,14 @@ LUCENIA_SEC_CONF="$LUCENIA_CONF/lucenia-security"
 PLATFORM="linux"
 ARCH="arm64"
 FILENAME="lucenia-$LUCENIA_VERSION-$PLATFORM-$ARCH.tar.gz"
-DOWNLOAD_URL="https://lucenia-resources.nyc3.cdn.digitaloceanspaces.com/artifact/$FILENAME"
-CHECKSUM_URL="https://lucenia-resources.nyc3.cdn.digitaloceanspaces.com/artifact/$FILENAME.sha256"
+DOWNLOAD_URL="https://lucenia-resources.nyc3.cdn.digitaloceanspaces.com/artifacts/$LUCENIA_VERSION/$FILENAME"
+CHECKSUM_URL="https://lucenia-resources.nyc3.cdn.digitaloceanspaces.com/artifacts/$LUCENIA_VERSION/$FILENAME.sig"
 LICENSE_API="https://cloud.lucenia.io/check/v1/license/developer/cli"
+TEMP_DIR="$LUCENIA_HOME/tmp_lucenia"
+# ENV Vars default if not set
+# User's email
+# INPUT_EMAIL="${INPUT_EMAIL:-}"
+# INPUT_FULLNAME="${INPUT_FULLNAME:-}"
 
 # Setup logging
 log() {
@@ -71,48 +77,69 @@ download_and_verify() {
     ;;
     esac
 
-    # local temp_dir=$(mktemp -d)
-    local temp_dir="$LUCENIA_HOME/tmp_lucenia"
     # make temp directory if it doesn't exist
-    if [ ! -d "$temp_dir" ]; then
-        mkdir -p "$temp_dir"
+    if [ ! -d "$TEMP_DIR" ]; then
+        mkdir -p "$TEMP_DIR"
     fi
 
     # Check if lucenia.tar.gz already exists
-    if [ -f "$temp_dir/$FILENAME" ]; then
-        log "Lucenia already downloaded to $temp_dir. Skipping download..."
+    if [ -f "$TEMP_DIR/$FILENAME" ]; then
+        log "Lucenia already downloaded to $TEMP_DIR. Skipping download..."
         return
     else
       log "Downloading $DOWNLOAD_URL Lucenia..."
-      log "into $temp_dir"
-      curl -sSL "$DOWNLOAD_URL" --output "$temp_dir/$FILENAME"
-      ls "$temp_dir"
-      curl -sSL "$CHECKSUM_URL" --output "$temp_dir/$FILENAME.sha256"
+      log "into $TEMP_DIR"
+      curl -sSL "$DOWNLOAD_URL" --output "$TEMP_DIR/$FILENAME"
+      ls "$TEMP_DIR"
+      curl -sSL "$CHECKSUM_URL" --output "$TEMP_DIR/$FILENAME.sha256"
       
       log "Verifying checksum..."
-      cd "$temp_dir"
+      cd "$TEMP_DIR"
       sha256sum -c "$FILENAME.sha256"
       cd ..
 
       log "Extracting files..."
-      tar xzf "$temp_dir/$FILENAME" -C "$LUCENIA_HOME"
+      tar xzf "$TEMP_DIR/$FILENAME" -C "$LUCENIA_HOME"
     fi
     log "Lucenia downloaded and verified!"
+}
+
+extract_files() {
+    # Check if folder $LUCENIA_HOME/lucenia-$LUCENIA_VERSION already exists
+    if [ -d "$LUCENIA_HOME/lucenia-$LUCENIA_VERSION" ]; then
+        log "Lucenia already extracted to $LUCENIA_HOME. Skipping extraction..."
+        return
+    else # Extract files
+        log "Extracting $TEMP_DIR/$FILENAME to $LUCENIA_HOME..."
+        tar xzf "$TEMP_DIR/$FILENAME" -C "$LUCENIA_HOME"
+    fi
+    log "Lucenia $LUCENIA_VERSION extracted to $LUCENIA_HOME!"
+
 }
 
 # Get trial license
 get_trial_license() {
     # check if trial license already exists in config
-    if [ -f "$LUCENIA_HOME/lucenia-$LUCENIA_VERSION/config/trial.crt" ]; then
+    if [ -f "$LUCENIA_HOME/trial.crt" ]; then
         log "Trial license already exists. Skipping license request."
         return
     fi
 
+    if [ -z "$INPUT_EMAIL" ]; then
+        log "Please enter your email address for trial license:"
+        read email
+    else
+        log "Email: $INPUT_EMAIL"
+        email=$INPUT_EMAIL
+    fi
 
-    log "Please enter your email address for trial license:"
-    read -r email < /dev/tty
-    log "Please enter your name for your dev license:"
-    read -r licensee < /dev/tty
+    if [ -z "$INPUT_FULLNAME" ]; then
+        log "Please enter your name for your dev license:"
+        read licensee
+    else
+        log "Licensee name: $INPUT_FULLNAME"
+        licensee=$INPUT_FULLNAME
+    fi    
     
     log "Requesting trial license for $email..."
     license_response=$(curl -sSL -X POST \
@@ -127,8 +154,8 @@ get_trial_license() {
         return
     fi
     
-    echo "$license_response" > "$LUCENIA_HOME/lucenia-$LUCENIA_VERSION/config/trial.crt"
-    log "License saved to $LUCENIA_HOME/lucenia-$LUCENIA_VERSION/config/trial.crt"
+    echo "$license_response" > "$LUCENIA_HOME/trial.crt"
+    log "License saved to $LUCENIA_HOME/trial.crt"
 }
 
 setup_demo_config() {
@@ -175,8 +202,13 @@ network.host: "0.0.0.0"
 http.port: 9200
 discovery.type: single-node
 bootstrap.memory_lock: true
-plugins.license.certificate_filepath: "$LUCENIA_HOME/lucenia-$LUCENIA_VERSION/config/trial.crt"
+plugins.license.certificate_filepath: "$LUCENIA_CONF/trial.crt"
 EOF
+}
+
+copy_cert_to_config() {
+    log "Copying trial license to config..."
+    cp "$LUCENIA_HOME/trial.crt" "$LUCENIA_CONF/trial.crt"
 }
 
 # Main installation flow
@@ -185,8 +217,10 @@ main() {
     setup_directories
     check_if_java_installed
     download_and_verify
+    extract_files
     get_trial_license
     write_lucenia_config
+    copy_cert_to_config
     setup_demo_config
     start_lucenia
     check_lucenia_health
