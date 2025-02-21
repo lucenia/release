@@ -95,7 +95,7 @@ download_and_verify() {
       
       log "Verifying checksum..."
       cd "$TEMP_DIR"
-      sha256sum -c "$FILENAME.sha256"
+      sha256sum -c "$FILENAME.sig"
       cd ..
 
       log "Extracting files..."
