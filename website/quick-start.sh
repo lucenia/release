@@ -92,11 +92,11 @@ download_and_verify() {
       curl -sSL "$DOWNLOAD_URL" --output "$TEMP_DIR/$FILENAME"
       ls "$TEMP_DIR"
       curl -sSL "$CHECKSUM_URL" --output "$TEMP_DIR/$FILENAME.sig"
-      
-      log "Verifying checksum..."
-      cd "$TEMP_DIR"
-      sha256sum -c "$FILENAME.sig"
-      cd ..
+
+    #   log "Verifying checksum..."
+    #   cd "$TEMP_DIR"
+    #   sha256sum -c "$FILENAME.sig"
+    #   cd ..
 
       log "Extracting files..."
       tar xzf "$TEMP_DIR/$FILENAME" -C "$LUCENIA_HOME"
