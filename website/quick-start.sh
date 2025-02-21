@@ -44,8 +44,7 @@ check_port_9200_is_used() {
     log "Checking if port 9200 is used..."
     if nc -z localhost 9200; then
         log "Port 9200 is used. Please stop the service using port 9200 and try again."
-        log "Run `kill -9 $(cat $LUCENIA_HOME/lucenia-$LUCENIA_VERSION/lucenia.pid)` to stop Lucenia"
-        log "Or run `sudo lsof -i :9200` to find the process using port 9200"
+        log "Or run \`sudo lsof -i :9200\` to find the process using port 9200"
         exit 1
     fi
 }
@@ -187,8 +186,12 @@ start_lucenia() {
 
 check_lucenia_health() {
     log "Checking Lucenia health..."
-    sleep 10
-    curl -sSL "https://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=50s" -ku "admin:$LUCENIA_INITIAL_ADMIN_PASSWORD"
+    # Wait for Lucenia to start catch if it fails
+    sleep 5
+    while ! curl -sSL -k -u admin:$LUCENIA_INITIAL_ADMIN_PASSWORD https://localhost:9200/_cluster/health | grep -q '"status"'; do
+        log "Waiting for Lucenia to start..."
+        sleep 5
+    done
     log "Lucenia is healthy!"
 }
 
