@@ -44,6 +44,8 @@ check_port_9200_is_used() {
     log "Checking if port 9200 is used..."
     if nc -z localhost 9200; then
         log "Port 9200 is used. Please stop the service using port 9200 and try again."
+        log "Run `kill -9 $(cat $LUCENIA_HOME/lucenia-$LUCENIA_VERSION/lucenia.pid)` to stop Lucenia"
+        log "Or run `sudo lsof -i :9200` to find the process using port 9200"
         exit 1
     fi
 }
