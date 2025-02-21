@@ -181,6 +181,13 @@ start_lucenia() {
     # Start Lucenia in background
     $LUCENIA_HOME/lucenia-$LUCENIA_VERSION/bin/lucenia -p \
         $LUCENIA_HOME/lucenia-$LUCENIA_VERSION/lucenia.pid -q &
+    sleep 10
+    # Wait for port 9200 to bind
+    log "Checking for lucenia to bind to port 9200"
+    while ! nc -z localhost 9200; do
+        log "Waiting for Lucenia to start to 9200..."
+        sleep 5
+    done
     log "Lucenia started successfully!"
 }
 
