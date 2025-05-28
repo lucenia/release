@@ -2,8 +2,8 @@
 set -e
 
 # Variables
-# Lucenia version defaults to 0.5.0 unless specified by environment variable
-LUCENIA_VERSION="${LUCENIA_VERSION:-0.5.0}"
+# Lucenia version defaults to 0.5.1 unless specified by environment variable
+LUCENIA_VERSION="${LUCENIA_VERSION:-0.5.1}"
 LUCENIA_HOME="$HOME/.lucenia"
 LUCENIA_INITIAL_ADMIN_PASSWORD="myStrongPassword@123"
 LUCENIA_SEC_TOOLS="$LUCENIA_HOME/lucenia-$LUCENIA_VERSION/plugins/lucenia-security/tools"
