@@ -2,8 +2,8 @@
 set -e
 
 # Variables
-# Lucenia version defaults to 0.5.0 unless specified by environment variable
-LUCENIA_VERSION="${LUCENIA_VERSION:-0.5.0}"
+# Lucenia version defaults to 0.5.1 unless specified by environment variable
+LUCENIA_VERSION="${LUCENIA_VERSION:-0.5.1}"
 LUCENIA_HOME="$HOME/.lucenia"
 LUCENIA_INITIAL_ADMIN_PASSWORD="myStrongPassword@123"
 LUCENIA_SEC_TOOLS="$LUCENIA_HOME/lucenia-$LUCENIA_VERSION/plugins/lucenia-security/tools"
@@ -12,8 +12,8 @@ LUCENIA_SEC_CONF="$LUCENIA_CONF/lucenia-security"
 PLATFORM="linux"
 ARCH="arm64"
 FILENAME="lucenia-$LUCENIA_VERSION-$PLATFORM-$ARCH.tar.gz"
-DOWNLOAD_URL="https://lucenia-resources.nyc3.cdn.digitaloceanspaces.com/artifacts/$LUCENIA_VERSION/$FILENAME"
-CHECKSUM_URL="https://lucenia-resources.nyc3.cdn.digitaloceanspaces.com/artifacts/$LUCENIA_VERSION/$FILENAME.sig"
+DOWNLOAD_URL="https://s3.us-east-2.amazonaws.com/artifacts.lucenia.io/releases/lucenia/$LUCENIA_VERSION/$FILENAME"
+CHECKSUM_URL="https://s3.us-east-2.amazonaws.com/artifacts.lucenia.io/releases/lucenia/$LUCENIA_VERSION/$FILENAME.sig"
 LICENSE_API="https://cloud.lucenia.io/check/v1/license/developer/cli"
 TEMP_DIR="$LUCENIA_HOME/tmp_lucenia"
 # ENV Vars default if not set
