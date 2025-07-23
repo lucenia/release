@@ -262,6 +262,7 @@ get_trial_license() {
 }
 
 setup_demo_config() {
+    log "Setting up demo configuration..."
     export LUCENIA_INITIAL_ADMIN_PASSWORD="$LUCENIA_INITIAL_ADMIN_PASSWORD"
     bash $LUCENIA_HOME/lucenia-$LUCENIA_VERSION/plugins/lucenia-security/tools/install_demo_configuration.sh -y
     chmod a+x "$LUCENIA_HOME/lucenia-$LUCENIA_VERSION/config/securityadmin_demo.sh"
