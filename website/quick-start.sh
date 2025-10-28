@@ -16,8 +16,8 @@ trap cleanup EXIT
 
 # Monitor process PID (global for cleanup)
 MONITOR_PID=""
-# Lucenia version defaults to 0.7.0 unless specified by environment variable
-LUCENIA_VERSION="${LUCENIA_VERSION:-0.7.0}"
+# Lucenia version defaults to 0.7.1 unless specified by environment variable
+LUCENIA_VERSION="${LUCENIA_VERSION:-0.7.1}"
 LUCENIA_HOME="$HOME/.lucenia"
 LUCENIA_INITIAL_ADMIN_PASSWORD="myStrongPassword@123"
 LUCENIA_SEC_TOOLS="$LUCENIA_HOME/lucenia-$LUCENIA_VERSION/plugins/lucenia-security/tools"
@@ -54,7 +54,9 @@ case $UNAME in
     esac
     ;;
 esac
-FILENAME="lucenia-$LUCENIA_VERSION-linux-$ARCH.tar.gz"
+
+FILENAME="lucenia-$LUCENIA_VERSION-$PLATFORM-$ARCH.tar.gz"
+
 DOWNLOAD_URL="https://s3.us-east-2.amazonaws.com/artifacts.lucenia.io/releases/lucenia/$LUCENIA_VERSION/$FILENAME"
 CHECKSUM_URL="https://s3.us-east-2.amazonaws.com/artifacts.lucenia.io/releases/lucenia/$LUCENIA_VERSION/$FILENAME.sig"
 LICENSE_API="https://cloud.lucenia.io/check/v1/license/developer/cli"
@@ -264,9 +266,9 @@ get_trial_license() {
 setup_demo_config() {
     log "Setting up demo configuration..."
     export LUCENIA_INITIAL_ADMIN_PASSWORD="$LUCENIA_INITIAL_ADMIN_PASSWORD"
-    bash $LUCENIA_HOME/lucenia-$LUCENIA_VERSION/plugins/lucenia-security/tools/install_demo_configuration.sh -y
-    chmod a+x "$LUCENIA_HOME/lucenia-$LUCENIA_VERSION/config/securityadmin_demo.sh"
-    chmod a+x "$LUCENIA_HOME/lucenia-$LUCENIA_VERSION/plugins/lucenia-security/tools/securityadmin.sh"
+    bash "$LUCENIA_SEC_TOOLS"/install_demo_configuration.sh -y
+    chmod a+x "$LUCENIA_CONF/securityadmin_demo.sh"
+    chmod a+x "$LUCENIA_SEC_TOOLS/securityadmin.sh"
 }
 
 # Monitor Lucenia logs for license expiration
