@@ -380,6 +380,15 @@ opensearch_security.multitenancy.enabled: true
 opensearch_security.multitenancy.tenants.preferred: ["Private", "Global"]
 opensearch_security.readonly_mode.roles: ["kibana_read_only"]
 opensearch_security.cookie.secure: false
+opensearchDashboards.branding:
+    logo:
+        defaultUrl: "https://lucenia-public-assets.s3.us-east-2.amazonaws.com/lucenia_favicon.png"
+    mark:
+        defaultUrl: "https://lucenia-public-assets.s3.us-east-2.amazonaws.com/lucenia_favicon.png"
+    loadingLogo:
+        defaultUrl: "https://lucenia-public-assets.s3.us-east-2.amazonaws.com/lucenia_logo.svg"
+    faviconUrl: "https://lucenia-public-assets.s3.us-east-2.amazonaws.com/lucenia_favicon.png"
+    applicationTitle: "Lucenia"
 EOF
     
     log "OpenSearch Dashboards configured to connect to Lucenia"
