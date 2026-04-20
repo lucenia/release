@@ -333,7 +333,9 @@ check_lucenia_health() {
 run_security_admin() {
    log "Running security admin..."
    # Set LUCENIA_JAVA_HOME so securityadmin.sh uses the bundled JDK
-   if [ -d "$LUCENIA_HOME/lucenia-$LUCENIA_VERSION/jdk" ]; then
+   if [ -d "$LUCENIA_HOME/lucenia-$LUCENIA_VERSION/jdk.app/Contents/Home" ]; then
+       export LUCENIA_JAVA_HOME="$LUCENIA_HOME/lucenia-$LUCENIA_VERSION/jdk.app/Contents/Home"
+   elif [ -d "$LUCENIA_HOME/lucenia-$LUCENIA_VERSION/jdk" ]; then
        export LUCENIA_JAVA_HOME="$LUCENIA_HOME/lucenia-$LUCENIA_VERSION/jdk"
    fi
    bash "$LUCENIA_SEC_TOOLS/securityadmin.sh" \
