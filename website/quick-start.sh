@@ -17,7 +17,7 @@ trap cleanup EXIT
 # Monitor process PID (global for cleanup)
 MONITOR_PID=""
 # Lucenia version defaults to 0.11.0 unless specified by environment variable
-LUCENIA_VERSION="${LUCENIA_VERSION:-0.11.0}"
+LUCENIA_VERSION="${LUCENIA_VERSION:-0.11.1}"
 LUCENIA_HOME="$HOME/.lucenia"
 LUCENIA_INITIAL_ADMIN_PASSWORD="myStrongPassword@123"
 LUCENIA_SEC_TOOLS="$LUCENIA_HOME/lucenia-$LUCENIA_VERSION/plugins/lucenia-security/tools"
