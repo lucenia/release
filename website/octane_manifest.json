@@ -1,0 +1,7 @@
+[
+  { "version": "1.0.0.0", "platform": "Any", "package": "lucenia-license / zip", "releaseLink": "https://getoctane.lucenia.io/1.0.0.0/lucenia-license-1.0.0.0.zip", "signatureLink": "https://getoctane.lucenia.io/1.0.0.0/lucenia-license-1.0.0.0.zip.sig", "releaseDate": "10/5/2026" },
+  { "version": "1.0.0.0", "platform": "Any", "package": "lucenia-content / zip", "releaseLink": "https://getoctane.lucenia.io/1.0.0.0/lucenia-content-1.0.0.0.zip", "signatureLink": "https://getoctane.lucenia.io/1.0.0.0/lucenia-content-1.0.0.0.zip.sig", "releaseDate": "10/5/2026" },
+  { "version": "1.0.0.0", "platform": "Any", "package": "lucenia-accelerator / zip", "releaseLink": "https://getoctane.lucenia.io/1.0.0.0/lucenia-accelerator-1.0.0.0.zip", "signatureLink": "https://getoctane.lucenia.io/1.0.0.0/lucenia-accelerator-1.0.0.0.zip.sig", "releaseDate": "10/5/2026" },
+  { "version": "1.0.0.0", "platform": "Any", "package": "octane-autoscale / zip", "releaseLink": "https://getoctane.lucenia.io/1.0.0.0/octane-autoscale-1.0.0.0.zip", "signatureLink": "https://getoctane.lucenia.io/1.0.0.0/octane-autoscale-1.0.0.0.zip.sig", "releaseDate": "10/5/2026" },
+  { "version": "1.0.0.0", "platform": "Any", "package": "octane-advisor / zip", "releaseLink": "https://getoctane.lucenia.io/1.0.0.0/octane-advisor-1.0.0.0.zip", "signatureLink": "https://getoctane.lucenia.io/1.0.0.0/octane-advisor-1.0.0.0.zip.sig", "releaseDate": "10/5/2026" }
+]
